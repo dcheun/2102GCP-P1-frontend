@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css">
+  <link href="css/styles.css" rel="stylesheet">
+  <title>Dashboard</title>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#"><img class="brand-logo" src="images/hp-logo.png" alt="brand-logo" /></a>
+      <form class="d-flex">
+        <input id="search-input" class="dc-search-box form-control me-2" type="search" placeholder="Search"
+          aria-label="Search">
+        <button id="search-btn" class="btn btn-outline-success">Search</button>
+      </form>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="dc-flex-item collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#"><i class="bi bi-github"></i></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#"><i class="bi bi-twitter"></i></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#"><i class="bi bi-slack"></i></a>
+          </li>
+          <li class="nav-item">
+            <a id="user-greeting" class="nav-link active" aria-current="page" href="#"></a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              <img id="avatar" src="images/avatar2.jpg" alt="avatar">
+            </a>
+            <ul class="dc-dropdown-menu dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a onclick="toggleView('expense')" class="dropdown-item" href="#"><i class="bi bi-person"></i>
+                  Expenses</a>
+              </li>
+              <li id="stat-li"><a onclick="toggleView('stats')" class="dropdown-item" href="#"><i
+                    class="bi bi-gear"></i>
+                  Statistics</a>
+              </li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li><a id="logout-link" class="dropdown-item" href="#"><i class="bi bi-box-arrow-right"></i> Logout</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container main-container">
+
+    <div class="welcome-banner mb-4">
+      <h4 class="text-center font-poppins">Welcome To The <span class="font-hp display-5">Hogwarts</span>
+        <span id="user-role-disp">Employee</span> Portal</h4>
+    </div>
+
+    <!-- Expense View -->
+    <div id="expense-view">
+      <div class="sub-banner text-center">
+        <hr />
+        <h3 class="font-aquiline fw-bold scroll-text pb-3 pt-1">I Solemnly Swear that I am up to No Good</h3>
+        <hr />
+      </div>
+
+      <!-- Placeholder for Border Spinner -->
+      <div id="loading-div" class="text-center">
+        <div id="loading-spinner" class="spinner-border text-secondary" style="width: 3rem; height: 3rem;"
+          role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+
+      <!-- Status, Create and Refresh Buttons -->
+      <div class="d-flex justify-content-between align-items-center mb-2 mt-4">
+        <h6 id="user-status-msg"></h6>
+        <div>
+          <button id="btn-create-expense" class="btn btn-outline-success" data-bs-toggle="modal"
+            data-bs-target="#modal-create"><i class="bi bi-plus-circle"></i> Create
+            Expense</button>
+          <button id="btn-refresh-table" class="btn btn-outline-primary"><i class="bi bi-arrow-repeat"></i> Refresh
+            Table</button>
+        </div>
+      </div>
+
+      <!-- Main Expense Table -->
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col" id="th-emp" class="sortable">Employee<span id="sort-emp-dir"></span></th>
+            <th scope="col">Amount</th>
+            <th scope="col" id="th-sub" class="sortable">Submitted At<span id="sort-sub-dir"></span></th>
+            <th scope="col" id="th-stat" class="sortable">Status<span id="sort-stat-dir"></span></th>
+            <th scope="col">Reviewed By</th>
+            <th scope="col">Reviewed At</th>
+            <th scope="col">Reason</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <!-- Placeholder for generated rows of content -->
+        <tbody id="expense-table-body">
+        </tbody>
+      </table>
+      <!-- End Expense Table -->
+    </div>
+    <!-- End Expense View -->
+
+
+    <!-- Statistics View -->
+    <div id="stats-view">
+      <div class="sub-banner text-center">
+        <hr />
+        <h3 class="font-aquiline fw-bold scroll-text pb-3 pt-1">Mischief Managed</h3>
+        <hr />
+      </div>
+      <div class="card-container">
+        <div class="row mb-3">
+          <div class="col-md">
+            <div class="card">
+              <div class="card-header fw-bold text-white bg-warning font-montserrat">
+                PENDING
+              </div>
+              <div class="card-body">
+                <div id="sc-pending-prog" class="progress mb-1">
+                  <div class="progress-bar fs-6" role="progressbar" style="width: 0%;" aria-valuenow="0"
+                    aria-valuemin="0" aria-valuemax="100">0%</div>
+                </div>
+                <p id="sc-pending-text" class="card-text text-center">0 out of 0</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md">
+            <div class="card">
+
+              <div class="card-header fw-bold text-white bg-success font-montserrat">
+                APPROVED
+              </div>
+              <div class="card-body">
+                <div id="sc-approved-prog" class="progress mb-1">
+                  <div class="progress-bar fs-6" role="progressbar" style="width: 0%;" aria-valuenow="0"
+                    aria-valuemin="0" aria-valuemax="100">0%</div>
+                </div>
+                <p id="sc-approved-text" class="card-text text-center">0 out of 0</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md">
+            <div class="card">
+              <div class="card-header fw-bold text-white bg-danger font-montserrat">
+                DENIED
+              </div>
+              <div class="card-body">
+                <div id="sc-denied-prog" class="progress mb-1">
+                  <div class="progress-bar fs-6" role="progressbar" style="width: 0%;" aria-valuenow="0"
+                    aria-valuemin="0" aria-valuemax="100">0%</div>
+                </div>
+                <p id="sc-denied-text" class="card-text text-center">0 out of 0</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="row">
+          <div class="col">
+            <div class="card">
+              <div class="card-header fw-bold font-montserrat">
+                TOTAL AMOUNTS
+              </div>
+              <div class="card-body">
+                <h5 class="card-title">You're a wizard <span id="sc-amt-user">Harry</span></h5>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item">PENDING: <span class="fw-bold" id="sc-amt-pending">$0.00</span></li>
+                  <li class="list-group-item">APPROVED: <span class="fw-bold" id="sc-amt-approved">$0.00</span></li>
+                  <li class="list-group-item">DENIED: <span class="fw-bold" id="sc-amt-denied">$0.00</span></li>
+                  <li class="list-group-item">TOTAL: <span class="fw-bold" id="sc-amt-total">$0.00</span></li>
+                </ul>
+              </div>
+              <div class="card-footer fw-bold d-flex">
+                <div class="d-flex flex-fill">
+                  <h6 class="card-text">Rank: <span id="sc-amt-rank"></span></h6>
+                </div>
+                <div class="divider-div d-flex justify-content-center">
+                  <span class="divider-span"></span>
+                </div>
+                <div class="d-flex flex-fill justify-content-start">
+                  <h6 class="card-text">Fate: <span id="sc-amt-fate"></span></h6>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End Statistics View -->
+  </div>
+  <!-- End Main Container -->
+
+  <!-- Modal - Edit Expense -->
+  <div id="modal" class="modal fade" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <h5 class="modal-title">Edit Expense ID: <span id="input-expId"></span></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body container-fluid">
+
+          <div class="row g-2 mb-2">
+            <div class="col-md">
+              <div class="form-floating">
+                <input class="form-control" type="text" id="input-fname" name="input-fname" placeholder="Harry" value=""
+                  disabled>
+                <label for="input-fname">Employee First Name</label>
+              </div>
+            </div>
+            <div class="col-md">
+              <div class="form-floating">
+                <input class="form-control" type="text" id="input-lname" name="input-lname" placeholder="Potter"
+                  value="" disabled>
+                <label for="input-lname">Employee Last Name</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="row g-2 mb-2">
+            <div class="form-floating">
+              <input class="form-control" type="email" id="input-email" name="input-email"
+                placeholder="hpotter@hogwarts.edu" value="" disabled>
+              <label for="input-email">Employee Email</label>
+            </div>
+          </div>
+
+          <div class="row g-2 mb-2">
+            <div class="col-md">
+              <div class="form-floating">
+                <input class="form-control" type="number" id="input-amount" name="input-amount" placeholder="0.00"
+                  value="" step=".01">
+                <label for="input-amount">Amount</label>
+              </div>
+            </div>
+            <div class="col-md">
+              <div class="form-floating">
+                <input class="form-control" type="text" id="input-submitted-at" name="input-submitted-at"
+                  placeholder="2021-03-04, 01:03:04 PM PST" value="" disabled>
+                <label for="input-submitted-at">Submitted At</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="row g-2 mb-2">
+            <div class="col-md">
+              <div class="form-floating">
+                <input class="form-control" type="text" id="input-mgr-fname" name="input-mgr-fname" placeholder="Albus"
+                  value="" disabled>
+                <label for="input-mgr-fname">Manager First Name</label>
+              </div>
+            </div>
+            <div class="col-md">
+              <div class="form-floating">
+                <input class="form-control" type="text" id="input-mgr-lname" name="input-mgr-lname"
+                  placeholder="Manager Last Name" value="" disabled>
+                <label for="input-mgr-lname">Manager Last Name</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="row g-2 mb-2">
+            <div class="form-floating">
+              <input class="form-control" type="email" id="input-mgr-email" name="input-mgr-email"
+                placeholder="adumbledore@hogwarts.edu" value="" disabled>
+              <label for="input-mgr-email">Manager Email</label>
+            </div>
+          </div>
+
+          <div class="row g-2 mb-2">
+            <div class="col-md">
+              <div class="form-floating">
+                <select class="form-select" id="input-status" name="input-status" aria-label="Status select" disabled>
+                  <option value="1">PENDING</option>
+                  <option value="2">APPROVED</option>
+                  <option value="3">DENIED</option>
+                </select>
+                <label for="input-status">Status</label>
+              </div>
+            </div>
+            <div class="col-md">
+              <div class="form-floating">
+                <input class="form-control" type="text" id="input-reviewed-at" name="input-reviewed-at"
+                  placeholder="2021-03-04, 01:03:04 PM PST" value="" disabled>
+                <label for="input-reviewed-at">Reviewed At</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="row g-2 mb-2">
+            <div class="form-floating">
+              <textarea class="form-control" name="input-reason" id="input-reason" placeholder="Reason"
+                disabled></textarea>
+              <label for="input-reason">Reason</label>
+            </div>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-light modal-btn modal-btn-cancel" type="button" data-bs-dismiss="modal">Cancel</button>
+          <button class="btn btn-primary modal-btn modal-btn-save" type="button" onclick="updateExpense()"
+            data-bs-dismiss="modal">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Modal - Edit Expense -->
+
+  <!-- Modal - Delete Expense -->
+  <div id="modal-delete" class="modal fade" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteModalLabel">Delete Expense ID: <span id="mod-del-input-id"></span></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body">
+          Are you sure you want to delete expense with ID=<span class="fw-bold" id="mod-del-confirm-id"></span>,
+          submitted by <span class="fw-bold" id="mod-del-confirm-user"></span>?
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-light modal-btn modal-btn-cancel" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-danger modal-btn modal-btn-save" onclick="deleteExpense()"
+            data-bs-dismiss="modal">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Modal - Delete Expense -->
+
+  <!-- Modal - Create Expense -->
+  <div id="modal-create" class="modal fade" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <h5 class="modal-title" id="createModalLabel">Create Expense</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body container-fluid">
+
+          <div class="row g-2 mb-2">
+            <div class="col-md">
+              <div class="form-floating">
+                <input class="form-control" type="number" id="modal-create-input-amount" name="input-amount"
+                  placeholder="0.00" value="" step=".01">
+                <label for="input-amount">Amount</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-light modal-btn modal-btn-cancel" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-success modal-btn modal-btn-save" onclick="createExpense()"
+            data-bs-dismiss="modal">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Modal - Delete Expense -->
+
+  <!-- Toast Container -->
+  <div class="toast-container position-absolute top-0 end-0 p-3 mt-5">
+    <div class="toast text-white bg-success" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header text-white bg-success">
+        <strong id="toast-success-hdr" class="me-auto">Expecto Patronum!</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+      <div id="toast-success-msg" class="toast-body">
+      </div>
+    </div>
+
+    <div class="toast text-white bg-danger" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header text-white bg-danger">
+        <strong id="toast-error-hdr" class="me-auto">Avada Kedavra!</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+      <div id="toast-error-msg" class="toast-body">
+      </div>
+    </div>
+  </div>
+  <!-- End Toast Container -->
+
+  <footer></footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous">
+  </script>
+  <script src="js/script.js"></script>
+
+</body>
+
+</html>

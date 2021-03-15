@@ -1,0 +1,140 @@
+@import url('http://fonts.cdnfonts.com/css/harry-potter');
+@import url('http://fonts.cdnfonts.com/css/aquiline-two');
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script&family=Montserrat:wght@400;600;900&family=Playfair+Display:wght@400;500;800&family=Poppins&display=swap');
+@import 'modal.css';
+
+:root {
+  --color-danger: #d9534f;
+  --color-primary: #0275d8;
+  --color-success: #5cb85c;
+  --color-warning: #f0ad4e;
+  --font-poppins: 'Poppins', sans-serif;
+  --font-montserrat: 'Montserrat', sans-serif;
+  --font-dancing: 'Dancing Script', cursive;
+  --font-family: 'Playfair Display', serif;
+  --font-hp: 'Harry Potter', sans-serif;
+  --font-aquiline: 'AquilineTwo', sans-serif;
+}
+
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1;
+}
+
+.stat-banner-img {
+  height: 7rem;
+}
+
+.main-container {
+  margin-top: 6rem;
+  padding-bottom: 5rem;
+}
+
+.font-hp {
+  font-family: var(--font-hp);
+}
+
+.font-aquiline {
+  font-family: var(--font-aquiline);
+}
+
+.font-montserrat {
+  font-family: var(--font-montserrat);
+}
+
+.font-stroke {
+  -webkit-text-stroke: 1px black;
+}
+
+#expense-view {
+  display: block;
+}
+
+#stats-view {
+  display: none;
+}
+
+.brand-logo {
+  height: 2rem;
+}
+
+#avatar {
+  height: 1.8rem;
+  border-radius: 50%;
+}
+
+.dc-flex-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dc-flex-item {
+  flex-grow: 0;
+}
+
+.dc-dropdown-menu.show {
+  left: -6.5rem;
+}
+
+.btn-icon {
+  display: inline-block;
+  padding: 0;
+}
+
+.btn-icon:hover:not(.disabled) {
+  cursor: pointer;
+}
+
+.btn-icon-edit {
+  margin-right: 0.25rem;
+  color: var(--color-primary);
+}
+
+.btn-icon-delete {
+  color: var(--color-danger);
+}
+
+.btn-icon.disabled {
+  pointer-events: all;
+  cursor: not-allowed;
+  color: #999;
+}
+
+.td-text-right {
+  text-align: right;
+}
+
+#loading-spinner {
+  position: fixed;
+  top: 16rem;
+}
+
+.sortable {
+  cursor: pointer;
+}
+
+.sortable:hover {
+  color: gray;
+}
+
+.progress {
+  height: 2.5rem;
+}
+
+.divider-div {
+  width: 2.5rem;
+}
+
+.divider-span {
+  border-left: 1px solid #999;
+}
+
+/* Bootstrap breakpoint for when it shows the hamburger menu dropdown in the navbar. */
+@media (min-width: 992px) {
+  .dc-search-box {
+    width: 25rem;
+  }
+}

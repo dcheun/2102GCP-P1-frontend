@@ -1,0 +1,24 @@
+
+.modal-dialog {
+  width: auto;
+  max-width: 45rem;
+}
+
+.modal-btn {
+  width: 5rem;
+}
+
+.modal-btn-cancel {
+  border: 1px solid #999;
+}
+
+.modal-btn-cancel:hover {
+  border: 1px solid #d0d0d0;
+  background-color: #d0d0d0;
+}
+
+@media (min-width: 576px) {
+  .modal-dialog {
+    width: 80%;
+  }
+}
